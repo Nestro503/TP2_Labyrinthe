@@ -75,10 +75,10 @@ Le fichier contient : ordre, taille,orientation (0 ou 1)et liste des arcs */
 Graphe * lire_graphe(char * nomFichier)
 {
     Graphe* graphe;
-    FILE * ifs = fopen("oriente.txt","r");
+    FILE * ifs = fopen(nomFichier,"r");
     int taille, orientation, ordre, s1, s2;
 
-    printf("%sTRUC", nomFichier);
+    printf("%s\n", nomFichier);
 
     if (!ifs)
     {
@@ -105,14 +105,15 @@ Graphe * lire_graphe(char * nomFichier)
         if(!orientation)
             graphe->pSommet=CreerArete(graphe->pSommet, s2, s1);
     }
-
     return graphe;
 }
+
+
 
 /*affichage du graphe avec les successeurs de chaque sommet */
 void graphe_afficher(Graphe* graphe)
 {
-    printf("graphe\n");
+    printf("\ngraphe :");
 
     if(graphe->orientation)
         printf("oriente\n");
@@ -128,7 +129,6 @@ void graphe_afficher(Graphe* graphe)
         afficher_successeurs(graphe->pSommet, i);
         printf("\n");
     }
-
 }
 
 
@@ -138,13 +138,16 @@ int main()
 
     char nom_fichier[50];
 
+    int sommet_initial;
+
     printf("entrer le nom du fichier du labyrinthe:");
     scanf("%s",nom_fichier);
 
     g = lire_graphe(nom_fichier);
 
     ///saisie du numéro du sommet initial pour lancer un BFS puis un DSF
-    printf("numero du sommet initial : \n");
+    printf("numero du sommet initial : ");
+    scanf("%d", &sommet_initial);
 
     /// afficher le graphe
     graphe_afficher(g);
