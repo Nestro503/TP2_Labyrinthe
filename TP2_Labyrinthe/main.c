@@ -139,7 +139,7 @@ int main()
     char nom_fichier[50];
 
     printf("entrer le nom du fichier du labyrinthe:");
-    gets(nom_fichier);
+    scanf("%s",nom_fichier);
 
     g = lire_graphe(nom_fichier);
 
