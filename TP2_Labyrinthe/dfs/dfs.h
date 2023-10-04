@@ -1,0 +1,4 @@
+#ifndef TP2_LABYRINTHE_DFS_H
+#define TP2_LABYRINTHE_DFS_H
+
+#endif
