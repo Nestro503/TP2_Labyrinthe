@@ -22,7 +22,6 @@ struct Sommet
     struct Arc* arc;
     int valeur;
     char couleur;
-
 };
 
 /* Alias de pointeur sur un Sommet */
@@ -55,5 +54,8 @@ void pp_sommet(pSommet * sommet, int* ppsommet, int num);
 
 /*affichage du graphe avec les successeurs de chaque sommet */
 void graphe_afficher(Graphe* graphe);
+
+// permet de choisir le type de parcours du graphe (BFS ou DFS)
+void choisir_parcours(int sommet_initial, Graphe* graphe);
 
 #endif // GRAPHE_H_INCLUDED
