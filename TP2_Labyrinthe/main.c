@@ -1,5 +1,6 @@
 
 #include "Graphe.h"
+#include "bfs/bfs.h"
 
 /* affichage des successeurs du sommet num*/
 void afficher_successeurs(pSommet * sommet, int num)
@@ -7,7 +8,7 @@ void afficher_successeurs(pSommet * sommet, int num)
 
     printf(" sommet %d :\n",num);
 
-    pArc arc=sommet[num]->arc;
+     pArc arc=sommet[num]->arc;
 
     while(arc!=NULL)
     {
@@ -15,6 +16,23 @@ void afficher_successeurs(pSommet * sommet, int num)
         arc=arc->arc_suivant;
     }
 
+}
+
+void pp_sommet(pSommet * sommet, int* ppsommet, int num){
+    int ppsommet_prev = *ppsommet;
+    pArc arc=sommet[num]->arc;
+    int temp, temp2;
+    while(arc!=NULL)
+    {
+        temp = arc->sommet;
+        temp2 = sommet[num]->valeur;
+        printf("%d ", sommet[num]->valeur);
+        if(temp < ppsommet_prev){
+            *ppsommet = temp;
+        }else if(temp2 < ppsommet_prev)
+            *ppsommet = temp2;
+        arc=arc->arc_suivant;
+    }
 }
 
 // Ajouter l'arête entre les sommets s1 et s2 du graphe
@@ -86,15 +104,17 @@ Graphe * lire_graphe(char * nomFichier)
         exit(-1);
     }
 
-    fscanf(ifs,"%d",&ordre);
+    fscanf(ifs,"%d",&ordre); // ordre du graphe
 
-    graphe=CreerGraphe(ordre); // créer le graphe d'ordre sommets
+    graphe=CreerGraphe(ordre); // créer le graphe d'ordre sommets et mets pp_sommet en premier
 
-    fscanf(ifs,"%d",&taille);
-    fscanf(ifs,"%d",&orientation);
+    fscanf(ifs,"%d",&taille); // taille du fichier
+    fscanf(ifs,"%d",&orientation); // si graphe orienté ou non
 
     graphe->orientation=orientation;
     graphe->ordre=ordre;
+    graphe->ppsommet = ordre; // donne le plus petit sommet à l'ordre du graphe
+    // probleme : si graphe commence avec un sommet plus grand que l'ordre du graphe ca pourrait faire bugger le code
 
     // créer les arêtes du graphe
     for (int i=0; i<taille; ++i)
@@ -126,6 +146,9 @@ void graphe_afficher(Graphe* graphe)
 
     for (int i=0; i<graphe->ordre; i++)
     {
+        pp_sommet(graphe->pSommet,&graphe->ppsommet,i);
+    }for (int i=0; i<graphe->ordre; i++)
+    {
         afficher_successeurs(graphe->pSommet, i);
         printf("\n");
     }
@@ -136,6 +159,8 @@ int main()
 {
     Graphe * g;
 
+    int ppsommet;
+
     char nom_fichier[50];
 
     int sommet_initial;
@@ -145,12 +170,15 @@ int main()
 
     g = lire_graphe(nom_fichier);
 
+
     ///saisie du numéro du sommet initial pour lancer un BFS puis un DSF
     printf("numero du sommet initial : ");
     scanf("%d", &sommet_initial);
 
     /// afficher le graphe
     graphe_afficher(g);
+
+    algo_bsf(*g, sommet_initial);
 
     return 0;
 }

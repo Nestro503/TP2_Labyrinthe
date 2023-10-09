@@ -34,6 +34,7 @@ typedef struct Graphe
     int taille;
     int orientation;
     int ordre;
+    int ppsommet;
     pSommet* pSommet;
 } Graphe;
 
@@ -49,6 +50,8 @@ pSommet* CreerArete(pSommet* sommet,int s1,int s2);
 
 /* affichage des successeurs du sommet num*/
 void afficher_successeurs(pSommet * sommet, int num);
+
+void pp_sommet(pSommet * sommet, int* ppsommet, int num);
 
 /*affichage du graphe avec les successeurs de chaque sommet */
 void graphe_afficher(Graphe* graphe);
