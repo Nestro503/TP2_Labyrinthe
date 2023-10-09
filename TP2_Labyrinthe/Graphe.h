@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// SOURCES : Bien que certaines fonctions ont été ajoutées la plupart des strcutures présentes est propirété
+//              intelectuelle de Mr DEBIZE.
+
 
 /* Structure d'un arc*/
 struct Arc
@@ -37,6 +40,7 @@ typedef struct Graphe
     pSommet* pSommet;
 } Graphe;
 
+
 // créer le graphe
 Graphe* CreerGraphe(int ordre, int ppsommet);
 
@@ -57,6 +61,6 @@ void afficher_successeurs(pSommet * sommet, int num, int ppsommet);
 void graphe_afficher(Graphe* graphe);
 
 // permet de choisir le type de parcours du graphe (BFS ou DFS)
-void choisir_parcours(int sommet_initial, Graphe* graphe);
+void choisir_parcours(char choix, int sommet_initial, Graphe* graphe);
 
 #endif // GRAPHE_H_INCLUDED

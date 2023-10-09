@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "fifo.h"
 
-// fifo.c provient du site http://morissardjerome.free.fr/
+// SOURCES : fifo.c provient du site http://morissardjerome.free.fr/
 
 File fileVide() {
     File F;

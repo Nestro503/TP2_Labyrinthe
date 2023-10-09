@@ -1,7 +1,7 @@
 #ifndef TP2_LABYRINTHE_FIFO_H
 #define TP2_LABYRINTHE_FIFO_H
 
-// fifo.h provient du site http://morissardjerome.free.fr/
+// SOURCES : fifo.h provient du site http://morissardjerome.free.fr/
 
 #include "cellule.h"
 

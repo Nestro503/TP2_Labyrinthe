@@ -53,7 +53,6 @@ void pp_sommet2(int* ppsommet, char * nomFichier){
             *ppsommet = temp;
         }
     }
-    printf("%d plus petit", *ppsommet);
 }
 
 // Ajouter l'arête entre les sommets s1 et s2 du graphe
@@ -111,6 +110,7 @@ Graphe* CreerGraphe(int ordre, int ppsommet)
 
 /* La construction du réseau peut se faire à partir d'un fichier dont le nom est passé en paramètre
 Le fichier contient : ordre, taille,orientation (0 ou 1)et liste des arcs */
+
 Graphe * lire_graphe(char * nomFichier, int ppsommet)
 {
     Graphe* graphe;
@@ -133,6 +133,7 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet)
 
     graphe->orientation=orientation;
     graphe->ordre=ordre;
+    graphe->taille=taille;
     graphe->ppsommet = ppsommet; // donne le plus petit sommet à l'ordre du graphe
     // probleme : si graphe commence avec un sommet plus grand que l'ordre du graphe ca pourrait faire bugger le code
 
@@ -161,7 +162,7 @@ void graphe_afficher(Graphe* graphe)
         printf("non oriente\n");
 
     printf("ordre = %d\n",graphe->ordre);
-
+    printf("taille = %d\n",graphe->taille);
     printf("listes d'adjacence :\n");
 
     for (int i=0; i<graphe->ordre; i++)
@@ -172,14 +173,21 @@ void graphe_afficher(Graphe* graphe)
 }
 
 
-int main()
-{
+void choisir_parcours(char choix,int sommet_initial, Graphe* graphe){
+    printf("Choix de parcours BFS ou DFS ? \nB ou D : ");
+    scanf("%c",&choix);
+    if(choix == 'B'){algo_bsf(*graphe, sommet_initial);}
+    if(choix == 'D'){ init_DFS(sommet_initial, *graphe);}
+    else printf("\nNous n'avons pas compris votre choix");
+}
+
+
+int main(){
+
     Graphe * g;
-
+    char choix;
     int ppsommet = 100;
-
     char nom_fichier[50];
-
     int sommet_initial;
 
     printf("entrer le nom du fichier du labyrinthe:");
@@ -188,15 +196,18 @@ int main()
     pp_sommet2(&ppsommet,nom_fichier);
     g = lire_graphe(nom_fichier, ppsommet);
 
-
     ///saisie du numéro du sommet initial pour lancer un BFS puis un DSF
     printf("numero du sommet initial : ");
     scanf("%d", &sommet_initial);
 
+    //choisir_parcours(choix,sommet_initial, g);
+
+    algo_bsf(*g, sommet_initial);
+    //init_DFS(sommet_initial, *g);
+
     /// afficher le graphe
     graphe_afficher(g);
-    //algo_bsf(*g, sommet_initial);
-    init_DFS2(sommet_initial, *g);
+
 
     return 0;
 }
