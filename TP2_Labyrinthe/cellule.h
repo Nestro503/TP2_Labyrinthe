@@ -1,6 +1,6 @@
-//
-// Created by Ethan Petain on 04/10/2023.
-//
+
+// cellule.h provient du site http://morissardjerome.free.fr/
+
 
 #ifndef TP2_LABYRINTHE_CELLULE_H
 #define TP2_LABYRINTHE_CELLULE_H

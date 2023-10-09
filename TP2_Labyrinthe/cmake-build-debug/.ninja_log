@@ -1,4 +1,12 @@
 # ninja log v5
 250	295	1696421831747991522	TP2_Labyrinthe	852f1a1a8f1107cd
-8	249	1696421831700369734	CMakeFiles/TP2_Labyrinthe.dir/main.c.o	fcb119bc6a8edc38
-0	48	1696422418389554979	build.ninja	9a3b79ec8701a70
+0	48	7181258937271119	build.ninja	9a3b79ec8701a70
+1	376	7185414871131059	CMakeFiles/TP2_Labyrinthe.dir/bfs/bfs.c.obj	75d44f712c0830fc
+9	414	7185414871540103	CMakeFiles/TP2_Labyrinthe.dir/dfs/dfs.c.obj	cad2e44fed5b0d10
+23	428	7185414871679570	CMakeFiles/TP2_Labyrinthe.dir/fifo.c.obj	c9aa09c1508c685d
+16	433	7185414871719452	CMakeFiles/TP2_Labyrinthe.dir/main.c.obj	b1423fc9b3f5870
+433	781	7185414875139266	TP2_Labyrinthe.exe	b1683fa5d9e7301f
+2	159	7185416096700394	CMakeFiles/TP2_Labyrinthe.dir/main.c.obj	b1423fc9b3f5870
+160	343	7185416098468106	TP2_Labyrinthe.exe	b1683fa5d9e7301f
+2	159	7185419693497589	CMakeFiles/TP2_Labyrinthe.dir/main.c.obj	b1423fc9b3f5870
+160	350	7185419695347615	TP2_Labyrinthe.exe	b1683fa5d9e7301f

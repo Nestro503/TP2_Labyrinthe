@@ -1,5 +1,7 @@
 
 #include "Graphe.h"
+#include "bfs/bfs.h"
+#include "dfs/dfs.h"
 
 /* affichage des successeurs du sommet num*/
 void afficher_successeurs(pSommet * sommet, int num)
@@ -95,6 +97,7 @@ Graphe * lire_graphe(char * nomFichier)
 
     graphe->orientation=orientation;
     graphe->ordre=ordre;
+    graphe->taille=taille;
 
     // créer les arêtes du graphe
     for (int i=0; i<taille; ++i)
@@ -122,6 +125,8 @@ void graphe_afficher(Graphe* graphe)
 
     printf("ordre = %d\n",graphe->ordre);
 
+    printf("taille = %d\n",graphe->taille);
+
     printf("listes d'adjacence :\n");
 
     for (int i=0; i<graphe->ordre; i++)
@@ -129,6 +134,16 @@ void graphe_afficher(Graphe* graphe)
         afficher_successeurs(graphe->pSommet, i);
         printf("\n");
     }
+}
+
+
+void choisir_parcours(int sommet_initial,pSommet *sommet, Graphe* graphe){
+    char choix = 0;
+    printf("Préfères tu faire un parcours en largeur (BFS) ou en longueur (DFS) de ce graphe ? \nB ou D : ");
+    scanf("%c",&choix);
+    if(choix == 'B'){}
+    if(choix == 'D'){ init_DFS(sommet_initial,sommet, graphe);}
+
 }
 
 
@@ -149,8 +164,10 @@ int main()
     printf("numero du sommet initial : ");
     scanf("%d", &sommet_initial);
 
+    choisir_parcours(sommet_initial, g);
+
     /// afficher le graphe
-    graphe_afficher(g);
+    //graphe_afficher(g);
 
     return 0;
 }
