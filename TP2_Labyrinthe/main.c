@@ -1,38 +1,59 @@
 
 #include "Graphe.h"
 #include "bfs/bfs.h"
+#include "dfs/dfs.h"
 
 /* affichage des successeurs du sommet num*/
-void afficher_successeurs(pSommet * sommet, int num)
+void afficher_successeurs(pSommet * sommet, int num, int ppsommet)
 {
-
-    printf(" sommet %d :\n",num);
-
-     pArc arc=sommet[num]->arc;
+    pArc arc=sommet[num]->arc;
+    printf(" sommet %d :\n",num + ppsommet);
 
     while(arc!=NULL)
     {
-        printf("%d ",arc->sommet);
+        printf("%d ",arc->sommet + ppsommet);
         arc=arc->arc_suivant;
     }
-
 }
 
-void pp_sommet(pSommet * sommet, int* ppsommet, int num){
-    int ppsommet_prev = *ppsommet;
-    pArc arc=sommet[num]->arc;
-    int temp, temp2;
-    while(arc!=NULL)
+
+void pp_sommet2(int* ppsommet, char * nomFichier){
+    FILE * ifs = fopen(nomFichier,"r");
+    int taille, orientation, ordre, s1, s2;
+    int temp;
+
+    if (!ifs)
     {
-        temp = arc->sommet;
-        temp2 = sommet[num]->valeur;
-        printf("%d ", sommet[num]->valeur);
+        printf("Erreur de lecture fichier\n");
+        exit(-1);
+    }
+
+    fscanf(ifs,"%d",&ordre); // ordre du graphe
+
+
+    fscanf(ifs,"%d",&taille); // taille du fichier
+    fscanf(ifs,"%d",&orientation); // si graphe orienté ou non
+
+    // donne le plus petit sommet à l'ordre du graphe
+    // probleme : si graphe commence avec un sommet plus grand que l'ordre du graphe ca pourrait faire bugger le code
+
+    int ppsommet_prev = *ppsommet;
+
+    // créer les arêtes du graphe
+    for (int i=0; i<taille; ++i)
+    {
+        ppsommet_prev = *ppsommet;
+        fscanf(ifs,"%d%d",&s1,&s2);
+        if(s1 < s2){
+            temp = s1;
+        }else{
+            temp = s2;
+        }
         if(temp < ppsommet_prev){
             *ppsommet = temp;
-        }else if(temp2 < ppsommet_prev)
-            *ppsommet = temp2;
-        arc=arc->arc_suivant;
+        }
     }
+    printf("%d plus petit", *ppsommet);
 }
 
 // Ajouter l'arête entre les sommets s1 et s2 du graphe
@@ -73,7 +94,7 @@ pSommet* CreerArete(pSommet* sommet,int s1,int s2)
 }
 
 // créer le graphe
-Graphe* CreerGraphe(int ordre)
+Graphe* CreerGraphe(int ordre, int ppsommet)
 {
     Graphe * Newgraphe=(Graphe*)malloc(sizeof(Graphe));
     Newgraphe->pSommet = (pSommet*)malloc(ordre*sizeof(pSommet));
@@ -81,7 +102,7 @@ Graphe* CreerGraphe(int ordre)
     for(int i=0; i<ordre; i++)
     {
         Newgraphe->pSommet[i]=(pSommet)malloc(sizeof(struct Sommet));
-        Newgraphe->pSommet[i]->valeur=i;
+        Newgraphe->pSommet[i]->valeur=i + ppsommet;
         Newgraphe->pSommet[i]->arc=NULL;
     }
     return Newgraphe;
@@ -90,13 +111,12 @@ Graphe* CreerGraphe(int ordre)
 
 /* La construction du réseau peut se faire à partir d'un fichier dont le nom est passé en paramètre
 Le fichier contient : ordre, taille,orientation (0 ou 1)et liste des arcs */
-Graphe * lire_graphe(char * nomFichier)
+Graphe * lire_graphe(char * nomFichier, int ppsommet)
 {
     Graphe* graphe;
     FILE * ifs = fopen(nomFichier,"r");
     int taille, orientation, ordre, s1, s2;
 
-    printf("%s\n", nomFichier);
 
     if (!ifs)
     {
@@ -106,24 +126,24 @@ Graphe * lire_graphe(char * nomFichier)
 
     fscanf(ifs,"%d",&ordre); // ordre du graphe
 
-    graphe=CreerGraphe(ordre); // créer le graphe d'ordre sommets et mets pp_sommet en premier
+    graphe=CreerGraphe(ordre, ppsommet); // créer le graphe d'ordre sommets et mets pp_sommet en premier
 
     fscanf(ifs,"%d",&taille); // taille du fichier
     fscanf(ifs,"%d",&orientation); // si graphe orienté ou non
 
     graphe->orientation=orientation;
     graphe->ordre=ordre;
-    graphe->ppsommet = ordre; // donne le plus petit sommet à l'ordre du graphe
+    graphe->ppsommet = ppsommet; // donne le plus petit sommet à l'ordre du graphe
     // probleme : si graphe commence avec un sommet plus grand que l'ordre du graphe ca pourrait faire bugger le code
 
     // créer les arêtes du graphe
     for (int i=0; i<taille; ++i)
     {
         fscanf(ifs,"%d%d",&s1,&s2);
-        graphe->pSommet=CreerArete(graphe->pSommet, s1, s2);
+        graphe->pSommet=CreerArete(graphe->pSommet, s1 - ppsommet, s2 - ppsommet);
 
         if(!orientation)
-            graphe->pSommet=CreerArete(graphe->pSommet, s2, s1);
+            graphe->pSommet=CreerArete(graphe->pSommet, s2 - ppsommet, s1 - ppsommet);
     }
     return graphe;
 }
@@ -146,10 +166,7 @@ void graphe_afficher(Graphe* graphe)
 
     for (int i=0; i<graphe->ordre; i++)
     {
-        pp_sommet(graphe->pSommet,&graphe->ppsommet,i);
-    }for (int i=0; i<graphe->ordre; i++)
-    {
-        afficher_successeurs(graphe->pSommet, i);
+        afficher_successeurs(graphe->pSommet, i, graphe->ppsommet);
         printf("\n");
     }
 }
@@ -159,7 +176,7 @@ int main()
 {
     Graphe * g;
 
-    int ppsommet;
+    int ppsommet = 100;
 
     char nom_fichier[50];
 
@@ -168,7 +185,8 @@ int main()
     printf("entrer le nom du fichier du labyrinthe:");
     scanf("%s",nom_fichier);
 
-    g = lire_graphe(nom_fichier);
+    pp_sommet2(&ppsommet,nom_fichier);
+    g = lire_graphe(nom_fichier, ppsommet);
 
 
     ///saisie du numéro du sommet initial pour lancer un BFS puis un DSF
@@ -177,8 +195,8 @@ int main()
 
     /// afficher le graphe
     graphe_afficher(g);
-
-    algo_bsf(*g, sommet_initial);
+    //algo_bsf(*g, sommet_initial);
+    init_DFS2(sommet_initial, *g);
 
     return 0;
 }
