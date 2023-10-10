@@ -4,14 +4,14 @@
 #include "dfs/dfs.h"
 
 /* affichage des successeurs du sommet num*/
-void afficher_successeurs(pSommet * sommet, int num, int ppsommet)
+void afficher_successeurs(pSommet * sommet, int num)
 {
     pArc arc=sommet[num]->arc;
-    printf(" sommet %d :\n",num + ppsommet);
+    printf(" sommet %d :\n",num );
 
     while(arc!=NULL)
     {
-        printf("%d ",arc->sommet + ppsommet);
+        printf("%d ",arc->sommet);
         arc=arc->arc_suivant;
     }
 }
@@ -37,7 +37,7 @@ void pp_sommet2(int* ppsommet, char * nomFichier){
     // donne le plus petit sommet à l'ordre du graphe
     // probleme : si graphe commence avec un sommet plus grand que l'ordre du graphe ca pourrait faire bugger le code
 
-    int ppsommet_prev = *ppsommet;
+    int ppsommet_prev;
 
     // créer les arêtes du graphe
     for (int i=0; i<taille; ++i)
@@ -93,7 +93,7 @@ pSommet* CreerArete(pSommet* sommet,int s1,int s2)
 }
 
 // créer le graphe
-Graphe* CreerGraphe(int ordre, int ppsommet)
+Graphe* CreerGraphe(int ordre)
 {
     Graphe * Newgraphe=(Graphe*)malloc(sizeof(Graphe));
     Newgraphe->pSommet = (pSommet*)malloc(ordre*sizeof(pSommet));
@@ -101,7 +101,7 @@ Graphe* CreerGraphe(int ordre, int ppsommet)
     for(int i=0; i<ordre; i++)
     {
         Newgraphe->pSommet[i]=(pSommet)malloc(sizeof(struct Sommet));
-        Newgraphe->pSommet[i]->valeur=i + ppsommet;
+        Newgraphe->pSommet[i]->valeur=i;
         Newgraphe->pSommet[i]->arc=NULL;
     }
     return Newgraphe;
@@ -126,7 +126,9 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet)
 
     fscanf(ifs,"%d",&ordre); // ordre du graphe
 
-    graphe=CreerGraphe(ordre, ppsommet); // créer le graphe d'ordre sommets et mets pp_sommet en premier
+    ordre = ordre + ppsommet;
+
+    graphe=CreerGraphe(ordre); // créer le graphe d'ordre sommets et mets pp_sommet en premier
 
     fscanf(ifs,"%d",&taille); // taille du fichier
     fscanf(ifs,"%d",&orientation); // si graphe orienté ou non
@@ -134,17 +136,17 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet)
     graphe->orientation=orientation;
     graphe->ordre=ordre;
     graphe->taille=taille;
-    graphe->ppsommet = ppsommet; // donne le plus petit sommet à l'ordre du graphe
+    // donne le plus petit sommet à l'ordre du graphe
     // probleme : si graphe commence avec un sommet plus grand que l'ordre du graphe ca pourrait faire bugger le code
 
     // créer les arêtes du graphe
     for (int i=0; i<taille; ++i)
     {
         fscanf(ifs,"%d%d",&s1,&s2);
-        graphe->pSommet=CreerArete(graphe->pSommet, s1 - ppsommet, s2 - ppsommet);
+        graphe->pSommet=CreerArete(graphe->pSommet, s1, s2);
 
         if(!orientation)
-            graphe->pSommet=CreerArete(graphe->pSommet, s2 - ppsommet, s1 - ppsommet);
+            graphe->pSommet=CreerArete(graphe->pSommet, s2, s1);
     }
     return graphe;
 }
@@ -167,7 +169,7 @@ void graphe_afficher(Graphe* graphe)
 
     for (int i=0; i<graphe->ordre; i++)
     {
-        afficher_successeurs(graphe->pSommet, i, graphe->ppsommet);
+        afficher_successeurs(graphe->pSommet, i);
         printf("\n");
     }
 }
@@ -203,7 +205,7 @@ int main(){
     //choisir_parcours(choix,sommet_initial, g);
 
     algo_bsf(*g, sommet_initial);
-    //init_DFS(sommet_initial, *g);
+    init_DFS(sommet_initial, *g);
 
     /// afficher le graphe
     graphe_afficher(g);

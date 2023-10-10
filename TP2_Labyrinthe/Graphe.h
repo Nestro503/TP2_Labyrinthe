@@ -42,7 +42,7 @@ typedef struct Graphe
 
 
 // créer le graphe
-Graphe* CreerGraphe(int ordre, int ppsommet);
+Graphe* CreerGraphe(int ordre);
 
 /* La construction du réseau peut se faire à partir d'un fichier dont le nom est passé en paramètre
 Le fichier contient : ordre, taille,orientation (0 ou 1)et liste des arcs */
@@ -54,7 +54,7 @@ void pp_sommet2(int* ppsommet, char * nomFichier);
 pSommet* CreerArete(pSommet* sommet,int s1,int s2);
 
 /* affichage des successeurs du sommet num*/
-void afficher_successeurs(pSommet * sommet, int num, int ppsommet);
+void afficher_successeurs(pSommet * sommet, int num);
 
 
 /*affichage du graphe avec les successeurs de chaque sommet */
