@@ -11,7 +11,6 @@ void coloration_successeur(Graphe graphe, int num, File file){ // fonction qui c
     while(arc != NULL){
         if(graphe.pSommet[arc->sommet]->couleur == 'B') {
             graphe.pSommet[arc->sommet]->couleur = 'G';
-
             enfiler(file, arc->sommet);
         }
         arc = arc->arc_suivant;
@@ -32,6 +31,7 @@ void algo_bsf(Graphe graphe, int sommet_initial){ // fonction qui prend un graph
     init_sommet(graphe); // initialisation de la couleur des sommets à blanc (0)
     enfiler(file, sommet_initial); // enfiler le premier sommet choisit
     graphe.pSommet[sommet_initial]->couleur = 'G'; // mettre le sommet à la couleur grise
+    printf("\nPARCOURS BSF :\n"); // indique le type de parcours choisit
     while(!fileEstVide(file)){ // tant que la file n'est pas vide faire :
         //ecrireFile(file);
         s = defilement(file); // defiler l'élément en tête de file
@@ -39,10 +39,10 @@ void algo_bsf(Graphe graphe, int sommet_initial){ // fonction qui prend un graph
         graphe.pSommet[s]->couleur = 'N'; // mettre le sommet courant à noir
         printf("%d --> ", s);
     }
-    printf("\n");
+    printf("X\n");
 }
 
-
+// fonction qui dérive de l'algo BDF mais cette fois ci adapté pour la recherche de composantes connexes
 void variante_algo_bsf(Graphe graphe, int sommet_initial){ // fonction qui prend un graphe et un sommet choisit
     int s = 0; // sommet courant
     File file = fileVide(); // création de la file vide
@@ -57,10 +57,11 @@ void variante_algo_bsf(Graphe graphe, int sommet_initial){ // fonction qui prend
     }
 }
 
-
+// fonction permettant la recherche via plusieurs parcours BSF des composantes connexes
 void recherche_CC(Graphe graphe){
     int num = 1; // compteur des composantes
-    for (int i = 0; i < graphe.ordre; ++i) {
+    printf("\nRECHERCHE DE COMPOSANTES CONNEXES :\n");
+    for (int i = 0; i < graphe.ordre; ++i) { // initialise tous les sommets du graphes en blanc
         graphe.pSommet[i]->couleur = 'B';
     }
     for (int i = 0; i < graphe.ordre; ++i) { // Boucle parcourant tout le graphe

@@ -16,18 +16,18 @@ void coloration_successeur_DFS(Graphe graphe, int num, int date){ // fonction qu
     }
 }
 
-void init_DFS(int sommet_initial, Graphe graphe){      // initialise le graphe en mettant tous les sommets en blanc
-    init_sommet(graphe);
+void algo_DFS(int sommet_initial, Graphe graphe){
     int date = 0;
+    init_sommet(graphe);
+    printf("\nPARCOURS DSF :\n"); // indique le type de parcours choisit
     parcours_DFS(sommet_initial,graphe,date);
-    printf("\n");
+    printf("X\n");
 }
 
 void parcours_DFS(int s, Graphe graphe, int date){
     graphe.pSommet[s]->couleur = 'G';
     date++;
     printf("%d --> ", s);
-
     coloration_successeur_DFS(graphe,s,date);
     graphe.pSommet[s]->couleur = 'N';
 }
