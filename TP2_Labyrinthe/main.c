@@ -207,6 +207,8 @@ int main(){
     algo_bsf(*g, sommet_initial);
     init_DFS(sommet_initial, *g);
 
+    recherche_CC(*g);
+
     /// afficher le graphe
     graphe_afficher(g);
 

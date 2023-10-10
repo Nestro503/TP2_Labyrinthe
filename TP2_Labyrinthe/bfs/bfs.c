@@ -53,21 +53,19 @@ void variante_algo_bsf(Graphe graphe, int sommet_initial){ // fonction qui prend
     while(!fileEstVide(file)){ // tant que la file n'est pas vide faire :
         s = defilement(file); // defiler l'élément en tête de file
         coloration_successeur(graphe, s, file);
-        graphe.pSommet[s - graphe.ppsommet]->couleur = 'N'; // mettre le sommet courant à noir
+        graphe.pSommet[s]->couleur = 'N'; // mettre le sommet courant à noir
+        printf("%d ",s);
     }
 }
 
 
-void recherche_CC(Graphe graphe, int sommet_initial){
+void recherche_CC(Graphe graphe){
     int num = 1; // compteur des composantes
     for (int i = 0; i < graphe.ordre; ++i) { // Boucle parcourant tout le graphe
-        while(graphe.pSommet[i]->couleur == 'B'){ // Tant qu'il esxiste d'autres sommets blanc c'est qu'il y a d'autres composantes
-            variante_algo_bsf(graphe,sommet_initial);
+        if(graphe.pSommet[i]->couleur == 'B'){ // Tant qu'il existe d'autres sommets blanc c'est qu'il y a d'autres composantes
             printf("Composante connexe n%d : ",num); // Affichage des différentes composantes
-            for (int i = 0; i < graphe.ordre; ++i) {
-                printf("%d", graphe.pSommet[i]->valeur); printf("\n");
-            }
-            //sommet_initial = ...;  // Passage du sommet initiale du premier à un autre sommet non exploré
+            variante_algo_bsf(graphe,i);
+            printf("\n");
             num++;  // Incrémentation du nombre de composantes trouvées
         }
     }

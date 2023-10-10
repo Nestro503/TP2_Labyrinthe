@@ -15,7 +15,7 @@ void coloration_successeur(Graphe graphe, int num, File file);
 void algo_bsf(Graphe graphe, int sommet_initial);
 
 // Permet d'identifier toutes les composantes connexes du graphes
-void recherche_CC(Graphe graphe, int sommet_initial);
+void recherche_CC(Graphe graphe);
 
 // Variante du parcours de BFS pour la recherche de composantes connexes
 void variante_algo_bsf(Graphe graphe, int sommet_initial);
