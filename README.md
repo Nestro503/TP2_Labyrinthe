@@ -1,2 +1,3 @@
 # TP2_Labyrinthe
-Coucou
+
+ Si bug veillez à bien reload cmake-projet à partir du cmake-build-debu
