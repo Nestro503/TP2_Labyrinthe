@@ -46,14 +46,13 @@ void algo_bsf(Graphe graphe, int sommet_initial){ // fonction qui prend un graph
 void variante_algo_bsf(Graphe graphe, int sommet_initial){ // fonction qui prend un graphe et un sommet choisit
     int s = 0; // sommet courant
     File file = fileVide(); // création de la file vide
-    init_sommet(graphe); // initialisation de la couleur des sommets à blanc (0)
     enfiler(file, sommet_initial); // enfiler le premier sommet choisit
     graphe.pSommet[sommet_initial]->couleur = 'G'; // mettre le sommet à la couleur grise
     while(!fileEstVide(file)){ // tant que la file n'est pas vide faire :
         s = defilement(file); // defiler l'élément en tête de file
         coloration_successeur(graphe, s, file);
         graphe.pSommet[s]->couleur = 'N'; // mettre le sommet courant à noir
-        printf("%d%c ",s, graphe.pSommet[s]->couleur);
+        printf("%d ",s);
     }
 }
 

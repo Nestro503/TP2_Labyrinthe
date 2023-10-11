@@ -96,7 +96,7 @@ Graphe* CreerGraphe(int ordre){
 /* La construction du réseau peut se faire à partir d'un fichier dont le nom est passé en paramètre
 Le fichier contient : ordre, taille, orientation (0 ou 1) et liste des arcs */
 
-Graphe * lire_graphe(char * nomFichier, int ppsommet){
+Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation){
     Graphe* graphe;
     FILE * ifs = fopen(nomFichier,"r");
     int taille, orientation, ordre, s1, s2;
@@ -123,6 +123,9 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet){
     // probleme : si graphe commence avec un sommet plus grand que l'ordre du graphe ca pourrait faire bugger le code
 
     // créer les arêtes du graphe
+    if(force_orientation == 1){
+        orientation = 0;
+    }
     for (int i=0; i<taille; ++i){
         fscanf(ifs,"%d%d",&s1,&s2);
         graphe->pSommet=CreerArete(graphe->pSommet, s1, s2);
@@ -158,7 +161,9 @@ void graphe_afficher(Graphe* graphe){
 
 int main(){
 
-    Graphe * g;
+    Graphe * g1;
+    Graphe * g2;
+    int force_orientation = 0;
     int ppsommet = 100;
     char nom_fichier[50];
     int sommet_initial;
@@ -169,17 +174,20 @@ int main(){
 
     /// A COMMENT
     pp_sommet2(&ppsommet,nom_fichier);
-    g = lire_graphe(nom_fichier, ppsommet);
+    g1 = lire_graphe(nom_fichier, ppsommet,force_orientation);
+    force_orientation++;
+    g2 = lire_graphe(nom_fichier, ppsommet,force_orientation);
+
 
     ///saisie du numéro du sommet initial pour lancer un BFS puis un DSF
     printf("Numero du sommet initial :");
     scanf("%d", &sommet_initial);
 
     ///parcours de graphe
-    algo_bsf(*g, sommet_initial);   // Fonction générale pour le parcours en largeur
-    algo_DFS(sommet_initial, *g);   // Fonction générale pour le parcours en longueur
+    algo_bsf(*g1, sommet_initial);   // Fonction générale pour le parcours en largeur
+    algo_DFS(sommet_initial, *g1);   // Fonction générale pour le parcours en longueur
 
-    recherche_CC(*g);   // Fonction de recherche des composantes connexes du graphe
+    recherche_CC(*g2);   // Fonction de recherche des composantes connexes du graphe
 
     /// afficher le graphe
     //graphe_afficher(g);
