@@ -14,32 +14,30 @@ void afficher_successeurs(pSommet * sommet, int num){
 }
 
 // A DETAILLER
-void pp_sommet2(int* ppsommet, char * nomFichier){
-    FILE * ifs = fopen(nomFichier,"r");
-    int taille, orientation, ordre, s1, s2;
-    int temp;
+void pp_sommet2(int* ppsommet, char * nomFichier){      // fonction reprise de lire_graph / pp_sommet = PlusPetit_sommet
+    FILE * ifs = fopen(nomFichier,"r");  // fonction qui recherche le plus petit sommet du graphe afin de le rajouter
+    int taille, s1, s2;                                 // dans l'ordre du graphe pour ne pas avoir d'erreur d'adresse pour les graphes
+    int temp;                                           // commencant par autre chode que 0
 
     if (!ifs){printf("Erreur de lecture fichier\n");exit(-1);}
-
-    fscanf(ifs,"%d",&ordre); // ordre du graphe
-    fscanf(ifs,"%d",&taille); // taille du fichier
-    fscanf(ifs,"%d",&orientation); // si graphe orienté ou non
-
+    fseek(ifs, 1* sizeof(int), SEEK_SET);
+    fscanf(ifs, "%d",&taille);
+    fseek(ifs, 3* sizeof(int), SEEK_SET);
     // donne le plus petit sommet à l'ordre du graphe
     // probleme : si graphe commence avec un sommet plus grand que l'ordre du graphe ca pourrait faire bugger le code
 
     int ppsommet_prev;
 
     // créer les arêtes du graphe
-    for (int i=0; i<taille; ++i){
+    for (int i=0; i<taille; ++i){ // on parcourt le fichier après la ligne designant l'orientation
         ppsommet_prev = *ppsommet;
         fscanf(ifs,"%d%d",&s1,&s2);
-        if(s1 < s2){
+        if(s1 < s2){ // si le sommet 1 de la ligne est plus petit alors on garde le sommet 1 sinon on garde le sommet 2
             temp = s1;
         }else{
             temp = s2;
         }
-        if(temp < ppsommet_prev){
+        if(temp < ppsommet_prev){ // si le sommet gardé est plus petit que le sommet d'avant alors on le met dans la varaible ppsommet
             *ppsommet = temp;
         }
     }
@@ -109,7 +107,8 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation){
 
     fscanf(ifs,"%d",&ordre); // ordre du graphe
 
-    ordre = ordre + ppsommet;
+    ordre = ordre + ppsommet; // le plus petit sommet est ajouté l'ordre pour évité les bugs des fichiers ou le graphe
+                              // ne commance pas à zéro
 
     graphe=CreerGraphe(ordre); // créer le graphe d'ordre sommets et mets pp_sommet en premier
 
@@ -189,7 +188,7 @@ int main(){
 
     recherche_CC(*g2);   // Fonction de recherche des composantes connexes du graphe
 
-    /// afficher le graphe
+    //afficher le graphe//
     //graphe_afficher(g);
 
     return 0;

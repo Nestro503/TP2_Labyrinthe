@@ -9,9 +9,9 @@ void coloration_successeur(Graphe graphe, int num, File file){ // fonction qui c
     pArc arc = graphe.pSommet[num]->arc;  // prends l'arc du sommet defiler
 
     while(arc != NULL){
-        if(graphe.pSommet[arc->sommet]->couleur == 'B') {
+        if(graphe.pSommet[arc->sommet]->couleur == 'B') { // détecte les sommets blancs du prédécesseur pour les mettre en gris (G)
             graphe.pSommet[arc->sommet]->couleur = 'G';
-            enfiler(file, arc->sommet);
+            enfiler(file, arc->sommet); // enfile le sommet au bout de l'arc du sommet initial
         }
         arc = arc->arc_suivant;
     }
@@ -52,7 +52,7 @@ void variante_algo_bsf(Graphe graphe, int sommet_initial){ // fonction qui prend
         s = defilement(file); // defiler l'élément en tête de file
         coloration_successeur(graphe, s, file);
         graphe.pSommet[s]->couleur = 'N'; // mettre le sommet courant à noir
-        printf("%d ",s);
+        printf("%d ", s);
     }
 }
 
