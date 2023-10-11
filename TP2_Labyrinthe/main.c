@@ -94,9 +94,10 @@ Graphe* CreerGraphe(int ordre){
 /* La construction du réseau peut se faire à partir d'un fichier dont le nom est passé en paramètre
 Le fichier contient : ordre, taille, orientation (0 ou 1) et liste des arcs */
 
-Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation){
+Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation, int sommet_initial){
     Graphe* graphe;
-    FILE * ifs = fopen(nomFichier,"r");
+    int compteur = 0; // compteur pour déterminer si le sommet_initial choisi correspond au graphe
+    FILE * ifs = fopen(nomFichier,"r"); // ouverture du fichier choisi
     int taille, orientation, ordre, s1, s2;
 
 
@@ -118,8 +119,6 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation){
     graphe->orientation=orientation;
     graphe->ordre=ordre;
     graphe->taille=taille;
-    // donne le plus petit sommet à l'ordre du graphe
-    // probleme : si graphe commence avec un sommet plus grand que l'ordre du graphe ca pourrait faire bugger le code
 
     // créer les arêtes du graphe
     if(force_orientation == 1){
@@ -127,11 +126,19 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation){
     }
     for (int i=0; i<taille; ++i){
         fscanf(ifs,"%d%d",&s1,&s2);
+        if(sommet_initial == s1 || sommet_initial == s2){
+            compteur++;
+        }
         graphe->pSommet=CreerArete(graphe->pSommet, s1, s2);
 
         if(!orientation)
             graphe->pSommet=CreerArete(graphe->pSommet, s2, s1);
     }
+    if(compteur == 0){ // si le compteur est a 0 c'est que le sommet_initial choisi ne correspond a aucun sommets du graphe
+        printf("Le sommet choisi n'est pas valable");
+        exit(-1); // fin du programme
+    }
+
     return graphe;
 }
 
@@ -172,16 +179,15 @@ int main(){
     printf("Entrer le nom du fichier du labyrinthe:");
     scanf("%s",nom_fichier); // atribution du nom du fichier
 
-    /// creation des graphes g1 et g2 en fonction du fichier choisi
-    pp_sommet2(&ppsommet,nom_fichier);
-    g1 = lire_graphe(nom_fichier, ppsommet,force_orientation); // creation et affichage du graphe g1
-    force_orientation++; // passage a 1 de la variable pour effectuer changement dans lire_graphe
-    g2 = lire_graphe(nom_fichier, ppsommet,force_orientation); // creation et affichage du graphe g2
-
-
     ///saisie du numéro du sommet initial pour lancer un BFS puis un DSF
     printf("Numero du sommet initial :");
     scanf("%d", &sommet_initial); // atribution du sommet initial
+
+    /// creation des graphes g1 et g2 en fonction du fichier choisi
+    pp_sommet2(&ppsommet,nom_fichier); //
+    g1 = lire_graphe(nom_fichier, ppsommet,force_orientation,sommet_initial); // creation et affichage du graphe g1
+    force_orientation++; // passage a 1 de la variable pour effectuer changement dans lire_graphe
+    g2 = lire_graphe(nom_fichier, ppsommet,force_orientation,sommet_initial); // creation et affichage du graphe g2
 
     ///parcours de graphe
     algo_bsf(*g1, sommet_initial);   // Fonction générale pour le parcours en largeur
