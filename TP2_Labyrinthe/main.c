@@ -160,27 +160,28 @@ void graphe_afficher(Graphe* graphe){
 
 int main(){
 
-    Graphe * g1;
-    Graphe * g2;
-    int force_orientation = 0;
-    int ppsommet = 100;
-    char nom_fichier[50];
-    int sommet_initial;
+    ///initialisation des variables
+    Graphe * g1; // graphe servant pour le parcours BSF/DSF (peut etre oriente ou non)
+    Graphe * g2; // graphe servant pour la recherche de composantes connexes (uniquement non orienté)
+    int force_orientation = 0;  // initialisation de force d'orientation à 0 (il ne sera pas pris en compte par lire_graphe)
+    int ppsommet = 100; // on met une valeur arbitraire du plus petit sommet à 100 au départ
+    char nom_fichier[50]; // le nom du fichier pourra faire au maximum 50 caracteres
+    int sommet_initial; // sommet par lequel nous allons commencé notre parcours
 
     ///validation du fichier utilisé
     printf("Entrer le nom du fichier du labyrinthe:");
-    scanf("%s",nom_fichier);
+    scanf("%s",nom_fichier); // atribution du nom du fichier
 
-    /// A COMMENT
+    /// creation des graphes g1 et g2 en fonction du fichier choisi
     pp_sommet2(&ppsommet,nom_fichier);
-    g1 = lire_graphe(nom_fichier, ppsommet,force_orientation);
-    force_orientation++;
-    g2 = lire_graphe(nom_fichier, ppsommet,force_orientation);
+    g1 = lire_graphe(nom_fichier, ppsommet,force_orientation); // creation et affichage du graphe g1
+    force_orientation++; // passage a 1 de la variable pour effectuer changement dans lire_graphe
+    g2 = lire_graphe(nom_fichier, ppsommet,force_orientation); // creation et affichage du graphe g2
 
 
     ///saisie du numéro du sommet initial pour lancer un BFS puis un DSF
     printf("Numero du sommet initial :");
-    scanf("%d", &sommet_initial);
+    scanf("%d", &sommet_initial); // atribution du sommet initial
 
     ///parcours de graphe
     algo_bsf(*g1, sommet_initial);   // Fonction générale pour le parcours en largeur
@@ -188,8 +189,8 @@ int main(){
 
     recherche_CC(*g2);   // Fonction de recherche des composantes connexes du graphe
 
-    //afficher le graphe//
-    //graphe_afficher(g);
+    /// afficher le graphe
+    graphe_afficher(g1);
 
     return 0;
 }
